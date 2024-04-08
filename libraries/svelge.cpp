@@ -1,15 +1,6 @@
 # include "svelge.h"
 
-Svelge::Svelge() :
-// usikker hvordan initialisering av listene skal gjøres
-  piezo_reading{0},
-  s_index{0},
-  p_index{0},
-  time_now{0},
-  piezo{0},
-  time_values{0},
-  gyro_values{0},
-  update{0}
+Svelge::Svelge()
 {
   pinMode(PIEZO_SENSOR, INPUT);
 }

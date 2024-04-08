@@ -32,7 +32,6 @@ class Falle
         int trigger2count;
         int trigger3count;
 
-        // private funksjoner
         float abs_acceleration ();
         float abs_gyroscope ();
         void handel_trigger1 ();

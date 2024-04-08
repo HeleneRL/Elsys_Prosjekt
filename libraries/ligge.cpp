@@ -3,8 +3,9 @@
 Ligge::Ligge () : 
   current_pos{0}, 
   current_pos_ts{millis()},
-  update{0}, 
-  alarm{0}
+  update_pos{0}, 
+  alarm{0},
+  update_alarm{0}
 {}
 
 //checking if pasient has switched position
