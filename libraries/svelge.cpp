@@ -28,21 +28,19 @@ void Svelge::append_data(){
 }
 
 void Svelge::detect_swallows() {
-  if (piezo[p_index] > PIEZO_THRESHOLD && abs(gyro_values[p_index]) < GYRO_THRESHOLD){
+  if ((piezo[p_index] > PIEZO_THRESHOLD) && (abs(gyro_values[p_index]) < GYRO_THRESHOLD)){
     if(s_index == 0){
-      swallow_times[s_index] = time_values[p_index];
-      s_index++;
+      swallow_times[s_index++] = time_values[p_index];
       update = 1;
     }
     //check if the time or the time one second before the time we want to append is already in swallow_times
     else if ((time_values[p_index] - swallow_times[s_index-1]) > 1){
-      swallow_times[s_index] = time_values[p_index];
-      s_index++;
+      swallow_times[s_index++] = time_values[p_index];
       update = 1;
     }
   }
 }
 
 unsigned long Svelge::send_data (){
-  return swallow_times[s_index];
+  return ((s_index == 0) ? 0 : swallow_times[s_index - 1]);
 }
