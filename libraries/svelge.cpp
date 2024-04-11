@@ -5,6 +5,18 @@ Svelge::Svelge()
   pinMode(PIEZO_SENSOR, INPUT);
 }
 
+int Svelge::get_piezo() {
+  return piezo_reading[p_index - 1];
+}
+
+float Svelge::get_gyro() {
+  return gyro_values[p_index - 1];
+}
+
+unsigned long Svelge::get_ts() {
+  return time_values[p_index - 1];
+}
+
 
 void Svelge::loop(sensors_event_t accel, sensors_event_t gyro, sensors_event_t temp) {
   a = accel; g = gyro; t = temp;              // oppdatering av gyroskopvariable
@@ -14,6 +26,15 @@ void Svelge::loop(sensors_event_t accel, sensors_event_t gyro, sensors_event_t t
   piezo_reading = analogRead(PIEZO_SENSOR);
   append_data();
   detect_swallows();
+}
+
+void Svelge::test_loop(sensors_event_t accel, sensors_event_t gyro, sensors_event_t temp) {
+  a = accel; g = gyro; t = temp;              // oppdatering av gyroskopvariable
+  
+  if (update) { update = 0; }
+
+  piezo_reading = analogRead(PIEZO_SENSOR);
+  append_data();
 }
 
 void Svelge::append_data(){

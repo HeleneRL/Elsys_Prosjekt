@@ -17,7 +17,7 @@ class Ligge
         sensors_event_t g;
         sensors_event_t t;
         
-        const int time_limit = 120000;         // 120 000 millisec = 2 min 
+        const int time_limit = 10 * (60 * 1000);         // 10 min (i ms)
         int current_pos;                       //current position: right = 1, left = 2, back = 3, sitting = 4, other = 0
         unsigned long current_pos_ts;                    //timestamp for time in current position
         bool alarm;

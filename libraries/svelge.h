@@ -39,6 +39,10 @@ class Svelge
         void loop(sensors_event_t accel, sensors_event_t gyro, sensors_event_t temp);
         unsigned long send_data();
         bool update;
+        int get_piezo();
+        float get_gyro();
+        unsigned long get_ts();
+        
 
 };
 

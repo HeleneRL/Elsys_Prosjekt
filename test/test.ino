@@ -57,11 +57,8 @@ void loop () {
     // oppdaterer variable fra gyroskop
     mpu.getEvent(&a, &g, &t);
 
-    l.loop(a, g, t);
-    s.loop(a, g ,t);
-    f.loop(a, g, t);
-
-    send_data(s, f, l, client);
+    s.test_loop(a, g ,t); 
+    send_test_data(s, client);
   
 }
 
@@ -78,6 +75,29 @@ void send_data(Svelge svelge, Falle falle, Ligge ligge, WiFiClient client) {
       data += String (ligge.update_pos) + ',' + String (ligge.get_current_pos()) + ',';
       data += String (ligge.get_current_pos_ts()) + ',';
       data += String (falle.update) + ',' + String (falle.get_fall());               // falle data
+
+      client.println ("POST /receiver_path HTTP/1.1");
+      client.println ("Host: " + String(serverAddress) + ":" + String(serverPort));
+      client.println ("Content-Type: application/x-www-form-urlencoded");
+      client.println ("Content-Length: " + String(data.length()));
+      client.println ();
+      client.println (data);
+      client.stop();
+      
+      Serial.println("Data packet sent");
+    }
+    else {
+      Serial.println("Could not connect to server! Data not sent");
+    }
+  }
+}
+
+void send_test_data(Svelge svelge, WiFiClient client) {
+  if (svelge.update) {
+    if (client.connect(serverAddress, serverPort)) {
+      data = "data=";
+
+      data += String (svelge.get_piezo) + ',' + String (svelge.get_gyro()) + ',' + String(svelge.get_ts);            // svelgedata
 
       client.println ("POST /receiver_path HTTP/1.1");
       client.println ("Host: " + String(serverAddress) + ":" + String(serverPort));
