@@ -6,15 +6,15 @@ Svelge::Svelge()
 }
 
 int Svelge::get_piezo() {
-  return piezo_reading[p_index - 1];
+  return ((p_index == 0) ? 0 : piezo[p_index - 1]);
 }
 
 float Svelge::get_gyro() {
-  return gyro_values[p_index - 1];
+  return ((p_index == 0) ? 0 : gyro_values[p_index - 1]);
 }
 
 unsigned long Svelge::get_ts() {
-  return time_values[p_index - 1];
+  return ((p_index == 0) ? 0 : time_values[p_index - 1]);
 }
 
 

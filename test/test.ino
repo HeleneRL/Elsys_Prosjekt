@@ -21,6 +21,9 @@ const int serverPort = 5000;                            // Change to your server
 int ret;
 String data;
 
+int sample_period = 100;
+int timer = 0;
+
 void setup() {
   //starting terminal for testing
   Serial.begin(115200);
@@ -55,10 +58,13 @@ void setup() {
 
 void loop () {
     // oppdaterer variable fra gyroskop
-    mpu.getEvent(&a, &g, &t);
+    if(millis() >= timer) {
+      mpu.getEvent(&a, &g, &t);
 
-    s.test_loop(a, g ,t); 
-    send_test_data(s, client);
+      s.test_loop(a, g ,t); 
+      send_test_data(s, client);
+      timer = millis() + sample_period;
+    }
   
 }
 
@@ -93,11 +99,11 @@ void send_data(Svelge svelge, Falle falle, Ligge ligge, WiFiClient client) {
 }
 
 void send_test_data(Svelge svelge, WiFiClient client) {
-  if (svelge.update) {
+  if (1) {
     if (client.connect(serverAddress, serverPort)) {
       data = "data=";
 
-      data += String (svelge.get_piezo) + ',' + String (svelge.get_gyro()) + ',' + String(svelge.get_ts);            // svelgedata
+      data += String (svelge.get_piezo()) + ',' + String (svelge.get_gyro()) + ',' + String(svelge.get_ts());            // svelgedata
 
       client.println ("POST /receiver_path HTTP/1.1");
       client.println ("Host: " + String(serverAddress) + ":" + String(serverPort));
