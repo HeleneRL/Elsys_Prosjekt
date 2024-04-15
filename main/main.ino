@@ -15,7 +15,7 @@ WiFiClient client;
 // WiFi
 const char* SSID = "Arduino";
 const char* password = "12345678";
-const char* serverAddress = "192.168.50.232";            // må oppdateres
+const char* serverAddress = "192.168.104.232";            // må oppdateres
 const int serverPort = 5000;                            // Change to your server's port
 
 int ret;

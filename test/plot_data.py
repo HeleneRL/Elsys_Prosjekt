@@ -9,9 +9,9 @@ import numpy as np
 app = Flask(__name__)
 
 # Initialize list to store sensor data
-timestamps = []
-piezo_data = []
-gyro_data = []
+timestamps = np.array([])
+piezo_data = np.array([])
+gyro_data = np.array([])
 max_g = 0
 
 lock = threading.Lock()
@@ -22,14 +22,16 @@ def plot_data_thread():
 
     def animate(i):
         ax1.clear()
-        ax1.plot(timestamps[-30:], piezo_data[-30:], label='Piezo')
+        ax1.set_ylim(0, 4200)
+        ax1.plot(timestamps[-50:]/1000, piezo_data[-50:], label='Piezo')
         ax1.set_xlabel('Timestamp')
         ax1.set_ylabel('Piezo Data')
         ax1.set_title('Real-time Piezo Data')
         ax1.legend()
 
         ax2.clear()
-        ax2.plot(timestamps[-30:], gyro_data[-30:], label='Gyro')
+        ax2.set_ylim(-2, 2)
+        ax2.plot(timestamps[-50:]/1000, gyro_data[-50:], label='Gyro')
         ax2.set_xlabel('Timestamp')
         ax2.set_ylabel('Gyro Data')
         ax2.set_title('Real-time Gyro Data')
@@ -47,15 +49,16 @@ def plot_data():
 @app.route('/receiver_path', methods=['POST'])
 def receive_data():
     # Receive sensor and timestamp data from Arduino
-    global max_g
+    global timestamps, piezo_data, gyro_data, max_g
     data = request.get_data().decode("utf-8")
     data = data[5:]
+    print(data)
     piezo, gyro, timestamp = map(float, data.split(','))
     if(gyro > max_g):
         max_g = gyro
-    timestamps.append(float(timestamp))
-    piezo_data.append(float(piezo))
-    gyro_data.append(float(gyro))
+    timestamps = np.append(timestamps, (float(timestamp)))
+    piezo_data = np.append(piezo_data, (float(piezo)))
+    gyro_data = np.append(gyro_data, (float(gyro)))
     print(max_g)
 
     return "Data received successfully"

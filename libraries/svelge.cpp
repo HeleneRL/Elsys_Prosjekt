@@ -43,7 +43,7 @@ void Svelge::append_data(){
   }
   // Append data to the arrays
   piezo[p_index] = piezo_reading;
-  time_values[p_index] = millis()/1000;
+  time_values[p_index] = millis();
   gyro_values[p_index] = g.gyro.y; 
   p_index++; // Increment the index tracker
 }
@@ -55,7 +55,7 @@ void Svelge::detect_swallows() {
       update = 1;
     }
     //check if the time or the time one second before the time we want to append is already in swallow_times
-    else if ((time_values[p_index] - swallow_times[s_index-1]) > 1){
+    else if ((time_values[p_index] - swallow_times[s_index-1]) > 1000){
       swallow_times[s_index++] = time_values[p_index];
       update = 1;
     }

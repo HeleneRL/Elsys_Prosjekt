@@ -9,10 +9,11 @@ import numpy as np
 app = Flask(__name__)
 
 # Initialize list to store sensor data
-swallow_list = []
+swallow_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 update = 0
 lock = threading.Lock()
 new_data_received = False  # Flag to indicate if new data has been received
+current = 0
 
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -20,15 +21,20 @@ import time
 import numpy as np
 
 def plot_data_thread():
-    fig, ax = plt.subplots()
-    global update
+    fig, ax = plt.subplots()   
+    global swallow_list, current
 
     def animate(i):
+        global current
         current_time = time.time() - start_time
         ax.clear()
-        values.append(update)
+        if current == swallow_list[1]:
+            values.append(0)
+        else:
+            current = swallow_list[1]
+            values.append(1)
         timestamps.append(current_time)  # Append current time to timestamps list
-        ax.plot(timestamps, values, marker='o')  # Plot the value against time
+        ax.plot(timestamps[-30:], values[-30:], marker='o')  # Plot the value against time
         ax.set_xlabel('Time (s)')
         ax.set_ylabel('Boolean Value')
         ax.set_title('Real-time Boolean Value')
@@ -60,13 +66,6 @@ def receive_data():
         update = packet_list[0]
         if(packet_list[0]):
             swallow_list.append(packet_list[1])
-        if(packet_list[2]):
-            alarm = packet_list[3]
-        if(packet_list[4]):
-            ligge_pos = packet_list[5]           
-            ligge_pos_ts = packet_list[6] 
-        if(packet_list[7]):
-            fall_alarm = packet_list[8]
         
         # Limit the list to store only the last 20 values
         swallow_list = swallow_list[-20:]

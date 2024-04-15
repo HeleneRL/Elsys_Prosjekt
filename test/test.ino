@@ -15,10 +15,9 @@ WiFiClient client;
 // WiFi
 const char* SSID = "Arduino";
 const char* password = "12345678";
-const char* serverAddress = "192.168.50.232";            // må oppdateres
+const char* serverAddress = "192.168.104.232";            // må oppdateres
 const int serverPort = 5000;                            // Change to your server's port
 
-int ret;
 String data;
 
 int sample_period = 100;
@@ -58,13 +57,13 @@ void setup() {
 
 void loop () {
     // oppdaterer variable fra gyroskop
-    if(millis() >= timer) {
+    /* if(millis() >= timer) { */
       mpu.getEvent(&a, &g, &t);
 
       s.test_loop(a, g ,t); 
-      send_test_data(s, client);
+      send_test_data(s, client);/* 
       timer = millis() + sample_period;
-    }
+    } */
   
 }
 
@@ -77,10 +76,10 @@ void send_data(Svelge svelge, Falle falle, Ligge ligge, WiFiClient client) {
       data = "data=";
 
       data += String (svelge.update) + ',' + String (svelge.send_data()) + ',';            // svelgedata
-      data += String (ligge.update_alarm) + ',' + String (ligge.get_alarm()) + ',';        // ligge data
+      data += String (ligge.update_alarm) + ',' + String (ligge.get_alarm()) + ',';        // liggedata
       data += String (ligge.update_pos) + ',' + String (ligge.get_current_pos()) + ',';
       data += String (ligge.get_current_pos_ts()) + ',';
-      data += String (falle.update) + ',' + String (falle.get_fall());               // falle data
+      data += String (falle.update) + ',' + String (falle.get_fall());               // falledata
 
       client.println ("POST /receiver_path HTTP/1.1");
       client.println ("Host: " + String(serverAddress) + ":" + String(serverPort));

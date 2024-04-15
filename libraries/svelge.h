@@ -11,7 +11,7 @@
 
 #define ARRAY_LENGTH 100                              // Må trolig endres
 #define PIEZO_SENSOR A0                                 // the piezo is connected to analog pin 0
-#define PIEZO_THRESHOLD 300                            //must be set through testing
+#define PIEZO_THRESHOLD 1200                            //must be set through testing
 #define GYRO_THRESHOLD 0.2                              //must be set through testing
 
 
