@@ -102,7 +102,7 @@ void send_test_data(Svelge svelge, WiFiClient client) {
     if (client.connect(serverAddress, serverPort)) {
       data = "data=";
 
-      data += String (svelge.get_piezo()) + ',' + String (svelge.get_gyro()) + ',' + String(svelge.get_ts());            // svelgedata
+      data += String (svelge.get_piezo()) + ',' + String (svelge.get_gyro_x()) + ',' + String (svelge.get_gyro_y()) + ',' + String (svelge.get_gyro_z()) + ',' + String(svelge.get_ts());            // svelgedata
 
       client.println ("POST /receiver_path HTTP/1.1");
       client.println ("Host: " + String(serverAddress) + ":" + String(serverPort));

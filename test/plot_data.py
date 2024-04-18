@@ -11,8 +11,15 @@ app = Flask(__name__)
 # Initialize list to store sensor data
 timestamps = np.array([])
 piezo_data = np.array([])
-gyro_data = np.array([])
-max_g = 0
+gyro_data_x = np.array([])
+gyro_data_y = np.array([])
+gyro_data_z = np.array([])
+
+plot_size = 100
+gyro_lim = 2
+piezo_lim = 4200
+gyro_threshold = 0.2
+piezo_threshold = 1000
 
 lock = threading.Lock()
 new_data_received = False  # Flag to indicate if new data has been received
@@ -22,16 +29,20 @@ def plot_data_thread():
 
     def animate(i):
         ax1.clear()
-        ax1.set_ylim(0, 4200)
-        ax1.plot(timestamps[-50:]/1000, piezo_data[-50:], label='Piezo')
-        ax1.set_xlabel('Timestamp')
+        ax1.set_ylim(0, piezo_lim)
+        ax1.plot(timestamps[-plot_size:]/1000, piezo_data[-plot_size:], label='Piezo')
+        #ax1.axhline(y = piezo_threshold, color = 'r', linestyle = '--')
         ax1.set_ylabel('Piezo Data')
         ax1.set_title('Real-time Piezo Data')
         ax1.legend()
 
         ax2.clear()
-        ax2.set_ylim(-2, 2)
-        ax2.plot(timestamps[-50:]/1000, gyro_data[-50:], label='Gyro')
+        ax2.set_ylim(-gyro_lim, gyro_lim)
+        ax2.plot(timestamps[-plot_size:]/1000, gyro_data_x[-plot_size:], label='Gyro X', color='b')
+        ax2.plot(timestamps[-plot_size:]/1000, gyro_data_y[-plot_size:], label='Gyro Y', color='r')
+        ax2.plot(timestamps[-plot_size:]/1000, gyro_data_z[-plot_size:], label='Gyro Z', color='g')
+        #plt.axhline(y = gyro_threshold, color = 'r', linestyle = '--')
+        #plt.axhline(y = -gyro_threshold, color = 'r', linestyle = '--')
         ax2.set_xlabel('Timestamp')
         ax2.set_ylabel('Gyro Data')
         ax2.set_title('Real-time Gyro Data')
@@ -49,17 +60,16 @@ def plot_data():
 @app.route('/receiver_path', methods=['POST'])
 def receive_data():
     # Receive sensor and timestamp data from Arduino
-    global timestamps, piezo_data, gyro_data, max_g
+    global timestamps, piezo_data, gyro_data_x, gyro_data_y, gyro_data_z
     data = request.get_data().decode("utf-8")
     data = data[5:]
     print(data)
-    piezo, gyro, timestamp = map(float, data.split(','))
-    if(gyro > max_g):
-        max_g = gyro
+    piezo, gyro_x, gyro_y, gyro_z, timestamp = map(float, data.split(','))
     timestamps = np.append(timestamps, (float(timestamp)))
     piezo_data = np.append(piezo_data, (float(piezo)))
-    gyro_data = np.append(gyro_data, (float(gyro)))
-    print(max_g)
+    gyro_data_x = np.append(gyro_data_x, (float(gyro_x)))
+    gyro_data_y = np.append(gyro_data_y, (float(gyro_y)))
+    gyro_data_z = np.append(gyro_data_z, (float(gyro_z)))
 
     return "Data received successfully"
 
