@@ -57,7 +57,7 @@ void loop () {
     mpu.getEvent(&a, &g, &t);
 
     l.loop(a, g, t);
-    s.loop(a, g ,t);
+    s.loop(g);
     f.loop(a, g, t);
 
     send_data(s, f, l, client);

@@ -36,8 +36,8 @@ void Svelge::loop(sensors_event_t gyro) {
   detect_swallows();
 }
 
-void Svelge::test_loop(sensors_event_t accel, sensors_event_t gyro, sensors_event_t temp) {
-  a = accel; g = gyro; t = temp;              // oppdatering av gyroskopvariable
+void Svelge::test_loop(sensors_event_t gyro) {
+  g = gyro;              // oppdatering av gyroskopvariable
   
   if (update) { update = 0; }
 
