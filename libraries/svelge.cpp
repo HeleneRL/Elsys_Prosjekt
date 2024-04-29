@@ -26,8 +26,8 @@ unsigned long Svelge::get_ts() {
 }
 
 
-void Svelge::loop(sensors_event_t accel, sensors_event_t gyro, sensors_event_t temp) {
-  a = accel; g = gyro; t = temp;              // oppdatering av gyroskopvariable
+void Svelge::loop(sensors_event_t gyro) {
+  g = gyro;              // oppdatering av gyroskopvariable
   
   if (update) { update = 0; }
 
@@ -58,7 +58,7 @@ void Svelge::append_data(){
   if(abs(gyro_values_x[p_index]) > GYRO_THRESHOLD_X
   || abs(gyro_values_y[p_index]) > GYRO_THRESHOLD_Y
   || abs(gyro_values_z[p_index]) > GYRO_THRESHOLD_Z) {
-    gyro_to = time_values[p_index] + 100;     // 100ms timeout when gyro measures above threshold
+    gyro_to = time_values[p_index] + 50;     // 50ms timeout when gyro measures above threshold
   }
   p_index++; // Increment the index tracker
 }

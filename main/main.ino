@@ -15,10 +15,9 @@ WiFiClient client;
 // WiFi
 const char* SSID = "Arduino";
 const char* password = "12345678";
-const char* serverAddress = "192.168.104.232";            // må oppdateres
+const char* serverAddress = "192.168.104.204";            // må oppdateres
 const int serverPort = 5000;                            // Change to your server's port
 
-int ret;
 String data;
 
 void setup() {
@@ -87,7 +86,8 @@ void send_data(Svelge svelge, Falle falle, Ligge ligge, WiFiClient client) {
       client.println (data);
       client.stop();
       
-      Serial.println("Data packet sent");
+      Serial.println("Data packet sent:");
+      Serial.println(data);
     }
     else {
       Serial.println("Could not connect to server! Data not sent");
