@@ -11,7 +11,7 @@
 
 #define ARRAY_LENGTH 100                              // Må trolig endres
 #define PIEZO_SENSOR A0                                 // the piezo is connected to analog pin 0
-#define PIEZO_THRESHOLD 2000                           //must be set through testing
+#define PIEZO_THRESHOLD 1500                           //must be set through testing
 #define GYRO_THRESHOLD_X 0.5                              //must be set through testing
 #define GYRO_THRESHOLD_Y 0.2                              //must be set through testing
 #define GYRO_THRESHOLD_Z 0.9                              //must be set through testing
@@ -42,7 +42,7 @@ class Svelge
     public:
         Svelge();
         void loop(sensors_event_t gyro);
-        void test_loop(sensors_event_t accel, sensors_event_t gyro, sensors_event_t temp);
+        void test_loop(sensors_event_t gyro);
         unsigned long send_data();
         bool update;
         int get_piezo();
