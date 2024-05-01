@@ -41,7 +41,7 @@ class Svelge
 
     public:
         Svelge();
-        void loop(sensors_event_t accel, sensors_event_t gyro, sensors_event_t temp);
+        void loop(sensors_event_t gyro);
         void test_loop(sensors_event_t accel, sensors_event_t gyro, sensors_event_t temp);
         unsigned long send_data();
         bool update;
